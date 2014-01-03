@@ -1,0 +1,10 @@
+{
+    "services": [
+        {
+            "type": "swagger",
+            "apis": {
+                "$ref": "http://localhost:3333/api/v1/api-docs/"
+            }
+        }
+    ]
+}

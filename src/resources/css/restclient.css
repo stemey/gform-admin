@@ -1,0 +1,119 @@
+@import url('normalize.css');
+
+body,html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Helvetica Neue', Arial;
+}
+
+#appContainer {
+    width: 100%;
+    height: 100%
+}
+
+#header img.logo {
+    margin: 10px 20px;
+    float: left;
+}
+
+#header h1 {
+    color: #BCBCBC;
+    display: inline-block;
+    margin: 13px 0 0 0;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 100%;
+}
+
+#header .dijitButton {
+    float: right;
+    margin: 14px;
+}
+
+
+
+.claro .dijitStackContainer {
+    border: none;
+}
+
+.claro .dijitBorderContainer-child[region=top] {
+    border: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.editor .buttonline {
+    margin: 0 5px;
+}
+
+.editor .row {
+    margin-bottom: 0.5em;
+}
+
+.editor label {
+    min-width: 15em;
+    display: inline-block;
+    margin-bottom: 0.5em;
+    vertical-align:top;
+}
+
+.editor .dijitSelect {
+    margin: 0;
+}
+
+.editor table tr td.dijitArrowButtonContainer.dijitDownArrowButton{
+    border:1px solid #B5BCC7;
+}
+.editor table tr td.dijitStretch.dijitButtonContents div{
+    width:50px;
+}
+
+.editor .dijitTitlePaneTitle.dijitClosed{
+    /*width:10px;*/
+}
+
+.editor textarea.dijitTextArea{
+    width:50%;
+    margin-top:20px;
+    display:block;
+}
+
+/* styling for json response */
+pre.response code[class]:after {
+    content: 'highlight: ' attr(class);
+    display: block; text-align: right;
+    font-size: smaller;
+    color: #CCC; background: white;
+    border-top: solid 1px;
+    padding-top: 0.5em;
+}
+
+pre code {
+    display: block;
+}
+
+code {
+    background: #F0F0F0;
+}
+
+div.gformEditorController .new {
+    display:none;
+}
+div.gformEditorController.create .new {
+    display:block;
+}
+div.gformEditorController .edit {
+    display:none;
+}
+div.gformEditorController.edit .edit {
+    display:block;
+}
+div.gformEditorController .working {
+    display:none;
+}
+div.gformEditorController.working .working {
+    display:block;
+}
