@@ -14,7 +14,7 @@ define([
 	"dojo/store/JsonRest",
 	"gform/Context",
 	"gform/opener/SingleEditorDialogOpener",
-	"./urlToIdConverter",
+	"gform/converter/identityConverter",
 	"dijit/form/Button",
 	"dijit/layout/StackContainer",
 	"dijit/layout/ContentPane",
@@ -25,6 +25,9 @@ define([
 
 	
 return declare("gform.tests.gridx.EditorController", [ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+
+    // summary:
+    //      uses mongodb specific refConverter
 		baseClass : "gformEditorController",
 		templateString : template,
 		store: null,
@@ -57,8 +60,8 @@ return declare("gform.tests.gridx.EditorController", [ _WidgetBase, _TemplatedMi
 			this.editor.ctx.schemaRegistry=schemaRegistry;
 			window.globalStoreRegistry=storeRegistry;
 			this.resource=resource;
-			this.editor.setMetaAndPlainValue(resource.resourceType, {});
-			this.store= new Store({target: resource.uriPath, idProperty: resource.idProperty});
+			this.editor.setMetaAndPlainValue(resource.resourceSchema, {});
+			this.store= new Store({target: resource.uri, idProperty: resource.idProperty});
 			this.watch("state",lang.hitch(this,"_onStateChange"));
 			this.editor.on("value-changed",lang.hitch(this,"_onStateChange"));
 		},
@@ -129,7 +132,11 @@ return declare("gform.tests.gridx.EditorController", [ _WidgetBase, _TemplatedMi
 		_onAdd: function(result) {
 			this._removeChangeIndicator();
 			this.set("state","edit");
-			this._edit(result);
+            if (result.toString() === "[object Object]") {
+                this._edit(result[this.resource.idProperty]);
+            } else {
+			    this._edit(result);
+            }
 		},
 		_removeChangeIndicator: function() {
 			var entity = this.editor.get("plainValue");
@@ -164,7 +171,7 @@ return declare("gform.tests.gridx.EditorController", [ _WidgetBase, _TemplatedMi
 			if (this.state!="create") {
 				var entity = this.editor.get("plainValue");
 				this._removeChangeIndicator();
-				this.store.remove(entity.id).then(lang.hitch(this,"_onRemoved"));
+				this.store.remove(entity[this.resource.idProperty]).then(lang.hitch(this,"_onRemoved"));
 			}
 		},
 		_onRemoved: function() {

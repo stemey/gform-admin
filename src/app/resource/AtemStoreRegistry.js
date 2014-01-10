@@ -1,4 +1,4 @@
-define([ "dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/store/JsonRest"//
+define([ "dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "./QueryStore"//
 		], function(array, lang, declare, JsonRest
 		) {
 
@@ -24,7 +24,7 @@ define([ "dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/stor
 					throw new Error("cannot find service with id "+id);
 				}
 				var idProperty= nameSearch?"id":service.idProperty
-				store = new JsonRest( {target:service.uriPath, idProperty:idProperty});
+				store = new JsonRest( {target:service.uri, idProperty:idProperty});
 				this.id2store[id]=store;
 			}
 			return store;

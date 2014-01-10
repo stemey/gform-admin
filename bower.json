@@ -7,7 +7,8 @@
       "dijit": "1.9.1",
       "dojox": "1.9.1",
       "util": "dojo-util#1.9.1",
-      "gform":"stemey/dojo-generate-form#0.20.0"
+      "gform":"stemey/dojo-generate-form#0.20.0",
+      "gridx": "git://github.com/oria/gridx.git#>=1.2.0"
 
   }
 }

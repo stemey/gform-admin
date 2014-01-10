@@ -1,22 +1,26 @@
 define([
-	"dojo/_base/declare",
-	"dojo/_base/lang",
-	"dojo/_base/array",
-], function(declare, lang, array){
+    "dojo/_base/array"
+], function (array) {
 
 
-	
-	return function(gformSchema) {
-		var columns= array.map(gformSchema.attributes, function(attribute) {
-			return {
-				id : attribute.code,
-				field : attribute.code,
-				name : attribute.label || attribute.code,
-				dataType:attribute.type
-			}
-		})
-		return columns;
-	}
+    return function (gformSchema) {
+        var columns = [];
+        array.forEach(gformSchema.attributes, function (attribute) {
+            if (!attribute.groups && !attribute.elements && !attribute.group && !attribute.element) {
+                var column = {
+                    id: attribute.code,
+                    field: attribute.code,
+                    name: attribute.label || attribute.code,
+                    dataType: attribute.type,
+                    // do't seem to work3
+                    //disabledConditions: ["contains", "notcontains"],
+                    autoComplete: false
+                }
+                columns.push(column);
+            }
+        })
+        return columns;
+    }
 
 
 });

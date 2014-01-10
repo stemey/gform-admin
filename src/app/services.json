@@ -2,8 +2,15 @@
     "services": [
         {
             "type": "swagger",
+            "prefix": "",
             "apis": {
-                "$ref": "http://localhost:3333/api/v1/api-docs/"
+                "$ref": "http://localhost:3333/api/v1/api-docs"
+            }
+        },{
+            "type": "crudSwagger",
+            "prefix": "crud:",
+            "apis": {
+                "$ref": "http://localhost:3333/api/v1/api-docs"
             }
         }
     ]

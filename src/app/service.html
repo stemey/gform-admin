@@ -1,34 +1,37 @@
 <div>
-  <div data-dojo-type="dijit/layout/BorderContainer">
-		<div data-dojo-type="dijit/MenuBar" data-dojo-attach-point="menuBar" data-dojo-props="region:'top'">
-	    <div data-dojo-type="dijit/PopupMenuBarItem">
-	        <span>Spring MVC Rest</span>
-	        <div data-dojo-type="dijit/DropDownMenu">
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'findCar'">find cars</div>
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'addCar'">create car</div>
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'updateCar'">update car</div>
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'removeCar'">remove car</div>
-	        </div>
-	    </div>
-	    <div data-dojo-type="dijit/PopupMenuBarItem">
-	        <span>JPA</span>
-	        <div data-dojo-type="dijit/DropDownMenu">
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'jpa.Category'">Categories</div>
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'jpa.Car'">Cars</div>
-	        </div>
-	    </div>
-	    <div data-dojo-type="dijit/PopupMenuBarItem">
-	        <span>Spring bean</span>
-	        <div data-dojo-type="dijit/DropDownMenu">
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'springbean.ExampleBean/configuredBean'">example bean #1</div>
-	            <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'springbean.ExampleBean/configuredBean2'">example bean #1</div>
-	        </div>
-	    </div>
-	  </div>
-		<div data-dojo-type="dijit.layout.StackContainer" data-dojo-props="doLayout:true,region: 'center'" data-dojo-attach-point="serviceStack">
+    <div data-dojo-type="dijit/layout/BorderContainer">
+        <div data-dojo-type="dijit/MenuBar" data-dojo-attach-point="menuBar" data-dojo-props="region:'top'">
+            <div data-dojo-type="dijit/PopupMenuBarItem">
+                <span>Vegetables</span>
+
+                <div data-dojo-type="dijit/DropDownMenu">
+                    <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'/api-docs/vegetables'">rest ui</div>
+                    <div data-dojo-type="dijit/MenuItem" data-dojo-props="service:'crud:/api-docs/vegetables'">crud ui
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-dojo-type="dijit.layout.StackContainer" data-dojo-props="doLayout:true,region: 'center'"
+             data-dojo-attach-point="serviceStack">
             <div data-dojo-attach-point="swagger" data-dojo-type="app/SwaggerController"></div>
-			<div data-dojo-attach-point="noselection" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:true">select a service</div>
-		</div>
-		</div>
-	
+            <div data-dojo-attach-point="resource" data-dojo-type="app/resource/GridController"></div>
+            <div data-dojo-attach-point="noselection" data-dojo-type="dijit.layout.ContentPane"
+                 data-dojo-props="selected:true">
+                <h2>gform rest client</h2>
+                <p>
+                    gform rest client is a ui to invoke rest services which provide necessary meta data. Two uis are provided: one to invoke the rest services
+                    and another one which enables easy browsing and crud operations via master detail pattern.
+                </p>
+                <h3>supported formats</h3>
+                <p>
+                    <ul>
+                        <li>swagger</li>
+                        <li>WADL (planned)</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+    </div>
 </div>

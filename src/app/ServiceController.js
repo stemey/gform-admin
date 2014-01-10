@@ -1,12 +1,13 @@
 define(
-    [  './SwaggerController',
-        "dojo/_base/lang", "dojo/_base/declare",
+    [  './resource/GridController',
+        './SwaggerController',
+        "dojo/_base/lang",
+        "dojo/_base/array",
+        "dojo/_base/declare",
         "app/service/MetaService",
         './MethodController',
-        //
-        //
-        "dojox/mvc/Group",//
-        "dijit/_WidgetBase", "dijit/_TemplatedMixin",
+        "dijit/_WidgetBase",
+        "dijit/_TemplatedMixin",
         "dijit/_WidgetsInTemplateMixin", //
         "dojo/text!./service.html",//
         "gform/layout/_InvisibleMixin",
@@ -17,10 +18,10 @@ define(
         "dijit/MenuItem"
 
     ],
-    function (SwaggerController, lang, declare, metaService, MethodController, //
+    function (GridController, SwaggerController, lang, array, declare, metaService, MethodController, //
               //
               //
-              Group,//
+              //
               _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, on) {
 
         return declare(
@@ -40,7 +41,14 @@ define(
                 },
                 startup: function () {
                     this.inherited(arguments);
-                    this.selectService("/vegetables");
+                    array.forEach(this.menuBar.getChildren(), function (menuItem) {
+                        array.forEach(menuItem.popup.getChildren(), function (navItem) {
+                            navItem.onClick = lang.hitch(this, "onNavClicked", navItem);
+                        }, this)
+                    }, this)
+                },
+                onNavClicked: function (navItem) {
+                    this.selectService(navItem.service);
                 },
                 selectService: function (service) {
                     var meta = metaService.getMeta(service);
@@ -48,9 +56,9 @@ define(
 
                 },
                 onMetaLoaded: function (meta) {
-                    var controller = this.swagger;
+                    var controller = this[meta.type];
                     this.serviceStack.selectChild(controller);
-                    controller.loadData(meta);
+                    controller.loadData(meta, metaService.getStoreRegistry(), metaService.getSchemaRegistry());
                 }
             });
 
