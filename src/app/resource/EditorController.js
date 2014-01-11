@@ -14,7 +14,7 @@ define([
 	"dojo/store/JsonRest",
 	"gform/Context",
 	"gform/opener/SingleEditorDialogOpener",
-	"gform/converter/identityConverter",
+	"gform/primitive/nullablePrimitiveConverter",
 	"dijit/form/Button",
 	"dijit/layout/StackContainer",
 	"dijit/layout/ContentPane",
@@ -23,7 +23,7 @@ define([
 ], function(declare, lang, array, domClass, when, aspect, Editor, createEditorFactory, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, Store,Context, SingleEditorDialogOpener, urlToIdConverter){
 
 
-	
+
 return declare("gform.tests.gridx.EditorController", [ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
     // summary:

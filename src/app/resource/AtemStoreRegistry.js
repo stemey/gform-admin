@@ -1,5 +1,5 @@
-define([ "dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "./QueryStore"//
-		], function(array, lang, declare, JsonRest
+define([   "dojo/_base/declare", "./QueryStore"//
+		], function(declare, JsonRest
 		) {
 
 	return declare( [  ], {

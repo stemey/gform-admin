@@ -22,10 +22,13 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "gform/layout/_InvisibleMixin",
     "dojo/text!./grid.html",
+    "gform/Context",
+    "gform/createLayoutEditorFactory",
+    "gform/primitive/nullablePrimitiveConverter",
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/Toolbar"
-], function (declare, lang, aspect, gform2TableStructure, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect, Store, json, EditorController, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template) {
+], function (declare, lang, aspect, gform2TableStructure, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect, Store, json, EditorController, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
 
 
     var allFilterConditions = {"string": ["contain", "equal", "startWith", "endWith", "notEqual", "notContain", "notStartWith", "notEndWith", "isEmpty"],
@@ -37,6 +40,7 @@ define([
     return declare([ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin], {
         baseClass: "gformGridController",
         templateString: template,
+        opener:null,
         postCreate: function () {
         },
         loadData: function (resource, storeRegistry, schemaRegistry) {
@@ -86,7 +90,23 @@ define([
             this.gridContainer.addChild(this.grid);
             this.grid.startup();
             //this.borderContainer.layout();
-            this.editorController.loadData(resource, storeRegistry, schemaRegistry);
+
+            this.ctx = new Context();
+            this.schemaUrl = resource.resourceSchema.code.toLowerCase();
+            this.ctx.schemaRegistry=schemaRegistry;
+            this.ctx.storeRegistry=storeRegistry;
+            this.ctx.opener=this.opener;
+            this.opener.set("ctx",this.ctx);
+
+
+            var editorFactory = createEditorFactory();
+            editorFactory.addConverterForType(identityConverter, "ref");
+            this.editorController.setEditorFactory(editorFactory);
+            this.editorController.setCtx(this.ctx);
+            this.editorController.set("store", this.store);
+            this.editorController.createNew(this.schemaUrl);
+
+            //this.editorController.loadData(resource, storeRegistry, schemaRegistry);
             aspect.before(this.store, "remove", lang.hitch(this, "_onDelete"));
             aspect.after(this.editorController, "_onUpdate", lang.hitch(this, "reload"));
             aspect.after(this.editorController, "_onAdd", lang.hitch(this, "reload"));
@@ -105,7 +125,7 @@ define([
             this.editorController.edit(e.id);
         },
         createNew: function () {
-            this.editorController.createNew();
+            this.editorController.createNew(this.schemaUrl);
         },
         previous: function () {
             this._moveSelection(-1);

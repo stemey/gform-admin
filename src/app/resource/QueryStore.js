@@ -1,4 +1,5 @@
-define([ './ToMongoQueryTransform',
+define([
+    './ToMongoQueryTransform',
     'dojo/request/xhr',
     'dojo/store/util/QueryResults',
     'dojo/Deferred',
@@ -13,18 +14,26 @@ define([ './ToMongoQueryTransform',
             this.transform = new ToMongoQueryTransform();
         },
         query: function (query, options) {
+            var params={};
+
             var queryParams = this.transform.transform(query);
+            if (queryParams) {
+                params.conditions=JSON.stringify(queryParams);
+            } else{
+                lang.mixin(params, query);
+            }
 
-            var sort = [];
             if (options.sort) {
-
+                var sort=[];
                 options.sort.forEach(function (col) {
                     sort.push(col.attribute+(col.descending ? "-" : ""));
                 });
+                params.sort=sort.join("  ");
 
             }
 
-            var params = {sort: sort.join(" "), conditions: JSON.stringify(queryParams), skip: options.start, limit: options.count};
+            params.skip= options.start;
+            params.limit= options.count;
             var results = xhr.get(this.target, {query: params, handleAs: "json"});
             var countParams = {count: true};
             results.total = xhr.get(this.target, {query: countParams, handleAs: "json"});

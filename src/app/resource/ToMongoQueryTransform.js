@@ -18,8 +18,23 @@ define([
                 });
                 return and;
             } else {
-                return null
+                // simple query
+                var query = {};
+                for (var key in gquery) {
+                    query[key]= this.convertQueryValue(gquery[key]);
+                }
+                return query;
             }
+        },
+        convertQueryValue: function(value){
+        if (typeof value === "object") {
+            value=value.toString();
+        }
+          if (value.length>0 && value.substring(value.length-1)=="*")   {
+              return {$regex : value.substring(0,value.length-1)};
+          }else{
+              return value;
+          }
         },
         conditions: function (data) {
             return data.map(function (d) {

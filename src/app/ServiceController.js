@@ -11,7 +11,6 @@ define(
         "dijit/_WidgetsInTemplateMixin", //
         "dojo/text!./service.html",//
         "gform/layout/_InvisibleMixin",
-        "dojo/on",
         "dijit/MenuBar",
         "dijit/PopupMenuBarItem",
         "dijit/DropDownMenu",
@@ -22,7 +21,7 @@ define(
               //
               //
               //
-              _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, on) {
+              _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin) {
 
         return declare(
             "app.ServiceController",
