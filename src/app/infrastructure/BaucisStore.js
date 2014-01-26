@@ -39,6 +39,7 @@ define([
             results.total = xhr.get(this.target, {query: countParams, handleAs: "json"});
             return new QueryResults(results);
         }, add: function (object, options) {
+            delete object[this.idProperty];
             var promise = this.inherited(arguments);
             var newPromise = new Deferred();
             promise.then(lang.hitch(this, "onAdded", newPromise), newPromise.reject);

@@ -2,7 +2,7 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/aspect",
-    "./gform2tableStructure",
+    "../infrastructure/gform2tableStructure",
     "gridx/Grid",
     'gridx/core/model/cache/Async',
     "gridx/modules/VirtualVScroller",
@@ -14,7 +14,7 @@ define([
     'gridx/modules/Focus',
     'gridx/modules/RowHeader',
     'gridx/modules/select/Row',
-    "./QueryStore",
+
     "dojo/json",
     "./EditorController",
     "dijit/_WidgetBase",
@@ -28,7 +28,7 @@ define([
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/Toolbar"
-], function (declare, lang, aspect, gform2TableStructure, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect, Store, json, EditorController, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
+], function (declare, lang, aspect, gform2TableStructure, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect,  json, EditorController, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
 
 
     var allFilterConditions = {"string": ["contain", "equal", "startWith", "endWith", "notEqual", "notContain", "notStartWith", "notEndWith", "isEmpty"],
@@ -43,19 +43,30 @@ define([
         opener:null,
         postCreate: function () {
         },
-        loadData: function (resource, storeRegistry, schemaRegistry) {
+        loadData: function (resource) {
+            // resource needs to have the foolowing properties
+            //      schemaRegistry
+            //      storeRegistry
+            //      tableStructure
+            //      converter for reference aka EditorFactory
+            //      schemaUrl
+            //
             if (this.grid) {
                 this.grid.destroy();
             }
-            var structure = gform2TableStructure(resource.collectionSchema);
+            var storeRegistry=resource.storeRegistry;
+            var schemaRegistry=resource.schemaRegistry;
+
+            var structure = resource.tableStructure;
             var props = { id: "grid", width: "100%", height: "100%"};
             props.cacheClass = Cache;
             props.structure = structure;
-            this.store = new Store({
-                target: resource.collectionUri,
-                idProperty: resource.idProperty,
-                sortParam: "sortBy"
-            });
+            this.store=storeRegistry.get(resource.collectionUrl);
+            //this.store = new Store({
+            //    target: resource.collectionUri,
+            //    idProperty: resource.idProperty,
+            //    sortParam: "sortBy"
+            //});
             props.store = this.store;
             props.modules = [
                 VirtualVScroller,
@@ -92,15 +103,15 @@ define([
             //this.borderContainer.layout();
 
             this.ctx = new Context();
-            this.schemaUrl = resource.resourceSchema.code.toLowerCase();
+            this.schemaUrl = resource.schemaUrl;
             this.ctx.schemaRegistry=schemaRegistry;
             this.ctx.storeRegistry=storeRegistry;
             this.ctx.opener=this.opener;
             this.opener.set("ctx",this.ctx);
 
 
-            var editorFactory = createEditorFactory();
-            editorFactory.addConverterForType(identityConverter, "ref");
+            var editorFactory = resource.editorFactory;
+            //editorFactory.addConverterForType(identityConverter, "ref");
             this.editorController.setEditorFactory(editorFactory);
             this.editorController.setCtx(this.ctx);
             this.editorController.set("store", this.store);

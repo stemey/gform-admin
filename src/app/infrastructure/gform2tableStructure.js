@@ -1,5 +1,5 @@
 define([
-    "dojo/_base/array"
+    "../../dojo/_base/array"
 ], function (array) {
 
 

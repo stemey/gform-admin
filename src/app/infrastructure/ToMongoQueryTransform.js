@@ -1,6 +1,6 @@
 define([
-    'dojo/_base/lang',
-    "dojo/_base/declare", "dojo/store/JsonRest"//
+    '../../dojo/_base/lang',
+    "dojo/_base/declare"
 ], function (lang, declare) {
 
     return declare([  ], {

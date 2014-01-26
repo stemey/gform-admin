@@ -1,4 +1,4 @@
-define([ "dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/store/JsonRest"//
+define([ "../../dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/store/JsonRest"//
 		], function(array, lang, declare, JsonRest
 		) {
 

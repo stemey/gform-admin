@@ -6,6 +6,7 @@ define(
         "dojo/_base/declare",
         "app/service/MetaService",
         './MethodController',
+        "dojo/when",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dijit/_WidgetsInTemplateMixin", //
@@ -16,8 +17,9 @@ define(
         "dijit/DropDownMenu",
         "dijit/MenuItem"
 
+
     ],
-    function (GridController, SwaggerController, lang, array, declare, metaService, MethodController, //
+    function (GridController, SwaggerController, lang, array, declare, metaService, MethodController, when,//
               //
               //
               //
@@ -51,13 +53,13 @@ define(
                 },
                 selectService: function (service) {
                     var meta = metaService.getMeta(service);
-                    meta.then(lang.hitch(this, "onMetaLoaded"));
+                    when(meta).then(lang.hitch(this, "onMetaLoaded"));
 
                 },
                 onMetaLoaded: function (meta) {
                     var controller = this[meta.type];
                     this.serviceStack.selectChild(controller);
-                    controller.loadData(meta, metaService.getStoreRegistry(), metaService.getSchemaRegistry());
+                    controller.loadData(meta);
                 }
             });
 
