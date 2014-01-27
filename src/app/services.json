@@ -6,6 +6,13 @@
             "resources": {
                 "$ref": "http://localhost:3333/api/gform"
             }
+        },
+        {
+            "type": "app/service/SwaggerMetaService",
+            "name": "swagger",
+            "apis": {
+                "$ref": "http://localhost:3333/api/api-docs"
+            }
         }
     ]
 }

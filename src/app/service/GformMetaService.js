@@ -54,7 +54,7 @@ define([
                 return this.resourcePromises[name];
             },
             getItems: function () {
-                return meta.resources;
+                return this.meta.resources;
             }
         });
 

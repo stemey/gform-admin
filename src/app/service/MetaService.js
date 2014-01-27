@@ -19,7 +19,8 @@ define([
                 resolver.resolve(services).then(lang.hitch(this, "onLoaded", services));
             },
             onLoaded: function (services, data) {
-                var serviceMap={};;
+                var serviceMap = {};
+                ;
                 this.services = serviceMap;
                 services.services.forEach(function (service) {
                     require([service.type], function (MetaServiceType) {
@@ -29,11 +30,18 @@ define([
                     });
                 }, this);
             },
+            getServices: function () {
+                var services = [];
+                Object.keys(this.services).forEach(function (name) {
+                    services.push({name:name});
+                }, this);
+                return services;
+            },
             getItems: function (name) {
                 // TODO add prefix
                 return this.services[name].getItems();
             },
-            _decomposeName: function(name) {
+            _decomposeName: function (name) {
                 return name.split(":");
             },
             getMetaService: function (name) {
@@ -42,7 +50,7 @@ define([
             },
             getMeta: function (name) {
                 var split = this._decomposeName(name);
-                var metaService= this.services[split[0]];
+                var metaService = this.services[split[0]];
                 return metaService.getMeta(split[1]);
             }
         });
