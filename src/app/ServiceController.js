@@ -1,6 +1,7 @@
 define(
     [  './resource/GridController',
         './SwaggerController',
+        "./router",
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/_base/declare",
@@ -19,7 +20,7 @@ define(
 
 
     ],
-    function (GridController, SwaggerController, lang, array, declare, metaService, MethodController, when,//
+    function (GridController, SwaggerController, router, lang, array, declare, metaService, MethodController, when,//
               //
               //
               //
@@ -38,25 +39,27 @@ define(
 
                 },
                 postCreate: function () {
-
+                    var cb = lang.hitch(this, "_pathChanged");
+                    router.register(":name/:resource", cb);
+                    router.startup();
+                },
+                _pathChanged: function (evt) {
+                    this.selectService(evt.params.name, evt.params.resource);
                 },
                 startup: function () {
                     this.inherited(arguments);
-                    array.forEach(this.menuBar.getChildren(), function (menuItem) {
-                        array.forEach(menuItem.popup.getChildren(), function (navItem) {
-                            navItem.onClick = lang.hitch(this, "onNavClicked", navItem);
-                        }, this)
-                    }, this)
-                    // use a proper promise here
+                   // use a proper promise here
                     setTimeout(lang.hitch(this, "addMenu"), 500);
 
 
                 },
-                onNavClicked: function (navItem) {
-                    this.selectService(navItem.service);
+                navigateToService: function (service, resource) {
+                    router.goToService(service, resource.split("/").join("_"))
+
                 },
-                selectService: function (service) {
-                    var meta = metaService.getMeta(service);
+                selectService: function (service, resource) {
+                    var resource=resource.split("_").join("/");
+                    var meta = metaService.getMeta(service + ":" + resource);
                     when(meta).then(lang.hitch(this, "onMetaLoaded"));
 
                 },
@@ -81,7 +84,7 @@ define(
                         var groupItem = new PopupMenuBarItem({label: service.name, popup: menu});
                         var items = metaService.getItems(service.name);
                         items.forEach(function (item) {
-                            var menuItem = new MenuItem({label: item.name, onClick: lang.hitch(this, "selectService", service.name+":"+item.name)});
+                            var menuItem = new MenuItem({label: item.name, onClick: lang.hitch(this, "navigateToService", service.name, item.name)});
                             menu.addChild(menuItem);
                         }, this);
                         groups.push(groupItem);
