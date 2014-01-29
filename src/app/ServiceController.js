@@ -48,18 +48,15 @@ define(
                 },
                 startup: function () {
                     this.inherited(arguments);
-                   // use a proper promise here
-                    setTimeout(lang.hitch(this, "addMenu"), 500);
-
-
+                    this.addMenu();
                 },
                 navigateToService: function (service, resource) {
                     router.goToService(service, resource.split("/").join("_"))
 
                 },
                 selectService: function (service, resource) {
-                    var resource=resource.split("_").join("/");
-                    var meta = metaService.getMeta(service + ":" + resource);
+                    var resource = resource.split("_").join("/");
+                    var meta = metaService.getMeta(service+":"+resource);
                     when(meta).then(lang.hitch(this, "onMetaLoaded"));
 
                 },
@@ -69,27 +66,26 @@ define(
                     controller.loadData(meta);
                 },
                 addMenu: function () {
-                    var groupItems = this.createMenuItems();
-                    groupItems.forEach(function (item) {
-                        this.menuBar.addChild(item);
-                    }, this);
-                    // layout this if menu was empty before
-                    this.resize();
-                },
-                createMenuItems: function () {
                     var groups = [];
                     var services = metaService.getServices();
-                    services.forEach(function (service) {
-                        var menu = new DropDownMenu();
-                        var groupItem = new PopupMenuBarItem({label: service.name, popup: menu});
-                        var items = metaService.getItems(service.name);
-                        items.forEach(function (item) {
-                            var menuItem = new MenuItem({label: item.name, onClick: lang.hitch(this, "navigateToService", service.name, item.name)});
-                            menu.addChild(menuItem);
-                        }, this);
-                        groups.push(groupItem);
-                    }, this);
-                    return groups;
+                    var me = this;
+                    when(services).then(function (services) {
+                        services.forEach(function (service) {
+                            var menu = new DropDownMenu();
+                            var groupItem = new PopupMenuBarItem({label: service.name, popup: menu});
+                            me.menuBar.addChild(groupItem);
+                            var items = metaService.getItems(service.name);
+                            when(items).then(function (items) {
+                                items.forEach(function (item) {
+                                    var menuItem = new MenuItem({label: item.name, onClick: lang.hitch(me, "navigateToService", service.name, item.name)});
+                                    menu.addChild(menuItem);
+                                }, me);
+
+                            });
+                            me.resize();
+                        }, me);
+                    });
+
                 }
 
             });
