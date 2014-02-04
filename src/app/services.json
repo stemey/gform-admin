@@ -1,8 +1,8 @@
 {
     "services": [
         {
-            "type": "app/service/GformMetaService",
-            "name": "gform",
+            "type": "app/service/BaucisCrudService",
+            "name": "baucis",
             "resources": {
                 "$ref": "http://localhost:3333/api/gform"
             }
@@ -14,5 +14,6 @@
                 "$ref": "http://localhost:3333/api/api-docs"
             }
         }
+
     ]
 }

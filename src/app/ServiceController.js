@@ -1,12 +1,10 @@
 define(
     [  './resource/GridController',
-        './SwaggerController',
+        './swagger/SwaggerController',
         "./router",
         "dojo/_base/lang",
-        "dojo/_base/array",
         "dojo/_base/declare",
         "app/service/MetaService",
-        './MethodController',
         "dojo/when",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
@@ -20,11 +18,7 @@ define(
 
 
     ],
-    function (GridController, SwaggerController, router, lang, array, declare, metaService, MethodController, when,//
-              //
-              //
-              //
-              _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, MenuBar, PopupMenuBarItem, DropDownMenu, MenuItem) {
+    function (GridController, SwaggerController, router, lang, declare, metaService, when, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, MenuBar, PopupMenuBarItem, DropDownMenu, MenuItem) {
 
         return declare(
             "app.ServiceController",
@@ -51,12 +45,12 @@ define(
                     this.addMenu();
                 },
                 navigateToService: function (service, resource) {
-                    router.goToService(service, resource.split("/").join("_"))
+                    router.goToService(service, encodeURIComponent(resource));
 
                 },
                 selectService: function (service, resource) {
-                    var resource = resource.split("_").join("/");
-                    var meta = metaService.getMeta(service+":"+resource);
+                    var resource = decodeURIComponent(resource);
+                    var meta = metaService.getMeta(service + ":" + resource);
                     when(meta).then(lang.hitch(this, "onMetaLoaded"));
 
                 },

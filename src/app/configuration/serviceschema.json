@@ -1,0 +1,42 @@
+{
+    "attributes": [
+        {
+            "code": "services",
+            "type": "array",
+            "typeProperty": "type",
+            "groups": [
+                {
+                    "code": "app/service/BaucisCrudService",
+                    "label": "baucis-admin",
+                    "attributes": [
+                        {
+                            "code": "name",
+                            "type": "string"
+                        },
+                        {
+                            "code": "resources",
+                            "type": "string",
+                            "converter": "refConverter"
+                        }
+                    ]
+
+                },
+                {
+                    "code": "app/service/SwaggerMetaService",
+                    "label": "swagger",
+                    "attributes": [
+                        {
+                            "code": "name",
+                            "type": "string"
+                        },
+                        {
+                            "code": "resources",
+                            "type": "string",
+                            "converter": "refConverter"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

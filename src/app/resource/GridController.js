@@ -2,7 +2,6 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/aspect",
-    "../infrastructure/gform2tableStructure",
     "gridx/Grid",
     'gridx/core/model/cache/Async',
     "gridx/modules/VirtualVScroller",
@@ -16,7 +15,6 @@ define([
     'gridx/modules/select/Row',
 
     "dojo/json",
-    "./EditorController",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
@@ -28,9 +26,10 @@ define([
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/Toolbar"
-], function (declare, lang, aspect, gform2TableStructure, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect,  json, EditorController, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
+], function (declare, lang, aspect, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect,  json, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
 
 
+    // TODO move this to baucis
     var allFilterConditions = {"string": ["contain", "equal", "startWith", "endWith", "notEqual", "notContain", "notStartWith", "notEndWith", "isEmpty"],
         "number": ["equal", "greater", "less", "greaterEqual", "lessEqual", "notEqual", "isEmpty"],
         "date": ["equal", "before", "after", "range", "isEmpty"],
@@ -62,11 +61,8 @@ define([
             props.cacheClass = Cache;
             props.structure = structure;
             this.store=storeRegistry.get(resource.collectionUrl);
-            //this.store = new Store({
-            //    target: resource.collectionUri,
-            //    idProperty: resource.idProperty,
-            //    sortParam: "sortBy"
-            //});
+            var conditions = resource.conditions || undefined;
+
             props.store = this.store;
             props.modules = [
                 VirtualVScroller,
@@ -77,13 +73,7 @@ define([
                 {
                     moduleClass: FilterBar,
                     type: "all",
-                    conditions: {
-                        "string": ["equal"],
-                        "number": ["equal"],
-                        "data": ["equal"],
-                        "time": ["equal"],
-                        "enum": ["equal"]
-                    }
+                    conditions: conditions
                 },
                 {
                     moduleClass: RowSelect,
@@ -93,14 +83,14 @@ define([
 
                 },
                 RowHeader,
-                SingleSort
+                SingleSort,
+                ColumnResizer
             ];
             this.grid = new Grid(props);
 
             this.grid.select.row.connect(this.grid.select.row, "onSelected", lang.hitch(this, "rowSelected"));
             this.gridContainer.addChild(this.grid);
             this.grid.startup();
-            //this.borderContainer.layout();
 
             this.ctx = new Context();
             this.schemaUrl = resource.schemaUrl;
@@ -111,18 +101,16 @@ define([
 
 
             var editorFactory = resource.editorFactory;
-            //editorFactory.addConverterForType(identityConverter, "ref");
             this.editorController.setEditorFactory(editorFactory);
             this.editorController.setCtx(this.ctx);
             this.editorController.set("store", this.store);
             this.editorController.createNew(this.schemaUrl);
 
-            //this.editorController.loadData(resource, storeRegistry, schemaRegistry);
             aspect.before(this.store, "remove", lang.hitch(this, "_onDelete"));
             aspect.after(this.editorController, "_onUpdate", lang.hitch(this, "reload"));
             aspect.after(this.editorController, "_onAdd", lang.hitch(this, "reload"));
             aspect.after(this.editorController, "_onRemoved", lang.hitch(this, "reload"));
-            //this.borderContainer.resize({w:500,h:500});
+
             this.borderContainer.resize();
         },
         reload: function () {

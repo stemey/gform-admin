@@ -21,20 +21,20 @@ define([
                 // simple query
                 var query = {};
                 for (var key in gquery) {
-                    query[key]= this.convertQueryValue(gquery[key]);
+                    query[key] = this.convertQueryValue(gquery[key]);
                 }
                 return query;
             }
         },
-        convertQueryValue: function(value){
-        if (typeof value === "object") {
-            value=value.toString();
-        }
-          if (value.length>0 && value.substring(value.length-1)=="*")   {
-              return {$regex : value.substring(0,value.length-1)};
-          }else{
-              return value;
-          }
+        convertQueryValue: function (value) {
+            if (typeof value === "object") {
+                value = value.toString();
+            }
+            if (value.length > 0 && value.substring(value.length - 1) == "*") {
+                return {$regex: value.substring(0, value.length - 1)};
+            } else {
+                return value;
+            }
         },
         conditions: function (data) {
             return data.map(function (d) {
@@ -49,10 +49,28 @@ define([
                 throw new Error("operation " + op + " is not supported.");
             }
         },
-        transformEqual: function (operands) {
+        transformEqual: function (operands, not) {
             var mcondition = {};
-            mcondition[operands[0].data] = operands[1].data;
+            mcondition[operands[0].data] = not ? {$ne: data} : data;
             return mcondition;
+        },
+        transformContain: function (operands) {
+            var mcondition = {};
+            mcondition[operands[0].data] = {$regex: operands[1].data};
+            return mcondition;
+        },
+        transformStartsWith: function (operands) {
+            var mcondition = {};
+            mcondition[operands[0].data] = {$regex: "^" + operands[1].data};
+            return mcondition;
+        },
+        transformEndsWith: function (operands) {
+            var mcondition = {};
+            mcondition[operands[0].data] = {$regex: operands[1].data + "$"};
+            return mcondition;
+        },
+        transformNot: function (operands) {
+            return this.condition(operands[0], true);
         }
     });
 });

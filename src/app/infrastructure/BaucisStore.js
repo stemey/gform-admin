@@ -14,26 +14,26 @@ define([
             this.transform = new ToMongoQueryTransform();
         },
         query: function (query, options) {
-            var params={};
+            var params = {};
 
             var queryParams = this.transform.transform(query);
             if (queryParams) {
-                params.conditions=JSON.stringify(queryParams);
-            } else{
+                params.conditions = JSON.stringify(queryParams);
+            } else {
                 lang.mixin(params, query);
             }
 
             if (options.sort) {
-                var sort=[];
+                var sort = [];
                 options.sort.forEach(function (col) {
-                    sort.push(col.attribute+(col.descending ? "-" : ""));
+                    sort.push(col.attribute + (col.descending ? "-" : ""));
                 });
-                params.sort=sort.join("  ");
+                params.sort = sort.join("  ");
 
             }
 
-            params.skip= options.start;
-            params.limit= options.count;
+            params.skip = options.start;
+            params.limit = options.count;
             var results = xhr.get(this.target, {query: params, handleAs: "json"});
             var countParams = {count: true};
             results.total = xhr.get(this.target, {query: countParams, handleAs: "json"});
@@ -46,6 +46,16 @@ define([
             return newPromise;
         }, onAdded: function (promise, data) {
             promise.resolve(data._id);
+        }, put: function (object, options) {
+            var promise = this.inherited(arguments);
+            var newPromise = new Deferred();
+            promise.then(lang.hitch(this, "onUpdated", newPromise), newPromise.reject);
+            return newPromise;
+        }, onUpdated: function (promise, data) {
+            var update = [
+                {path: "__v", "value": data["__v"]}
+            ];
+            promise.resolve(update);
         }
     });
 
