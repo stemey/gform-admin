@@ -19,6 +19,7 @@ define([
                 this.storeClass = BaucisStore;
                 this.editorFactory = createLayoutEditorFactory();
                 this.editorFactory.addConverterForType(identityConverter, "ref");
+                this.idProperty = "_id";
 
             },
             _createResource: function (resource) {

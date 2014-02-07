@@ -7,9 +7,8 @@ define([
         transform: function (gquery) {
             if (gquery.op === "or") {
                 var conditions = this.conditions(gquery.data);
-                return {"$or": conditions}
+                return {$or: conditions}
             } else if (gquery.op === "and") {
-
                 var conditions = this.conditions(gquery.data);
                 var and = {};
                 conditions.forEach(function (condition) {
@@ -41,17 +40,18 @@ define([
                 return this.condition(d);
             }, this);
         },
-        condition: function (gcondition) {
+        condition: function (gcondition, not) {
             var op = "transform" + gcondition.op.substring(0, 1).toUpperCase() + gcondition.op.substring(1, gcondition.op.length);
             if (this[op]) {
-                return this[op](gcondition.data)
+                return this[op](gcondition.data, not)
             } else {
                 throw new Error("operation " + op + " is not supported.");
             }
         },
         transformEqual: function (operands, not) {
             var mcondition = {};
-            mcondition[operands[0].data] = not ? {$ne: data} : data;
+            var value = operands[1].data;
+            mcondition[operands[0].data] = not ? {$ne: value} : value;
             return mcondition;
         },
         transformContain: function (operands) {

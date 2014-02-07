@@ -40,7 +40,9 @@ define([ "../../dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "doj
             this.editor.set("editorFactory", createStandardEditorFactory());
             this.editor.setMetaAndPlainValue(this.singleton.resourceType, entity);
             this.editor.startup();
-            observationService.observe(this.singleton.topic, lang.hitch(this, "onMessage"));
+            if (this.singleton.topic) {
+                observationService.observe(this.singleton.topic, lang.hitch(this, "onMessage"));
+            }
         },
         onMessage: function (e) {
             console.log(e);

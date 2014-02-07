@@ -1,13 +1,13 @@
 <div >
-	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="borderContainer" style="width:100%;height:100%">
+	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="borderContainer" data-dojo-props="gutters:true, liveSplitters:true" style="width:100%;height:100%">
 			
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
 			<div id="toolbar" data-dojo-type="dijit/Toolbar"
 			><div id="toolbar.create" data-dojo-type="dijit/form/Button" data-dojo-props="region:top,iconClass:'plusIcon'" data-dojo-attach-event="onClick:createNew">New</div>
 			</div>
 	</div>
-		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-attach-point="gridContainer" style="width:30%" data-dojo-props="region:'left',splitters:true"></div>
-        <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region:'center'" style="width:100%;height:100%">
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-attach-point="gridContainer" style="width:30%" data-dojo-props="region:'left',splitter:true"></div>
+        <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region:'center', gutters:false" style="width:100%;height:100%">
             <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
                 <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:previous"><</button>
                 <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:next">></button>

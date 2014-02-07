@@ -48,9 +48,15 @@ define([
             promise.resolve(data._id);
         }, put: function (object, options) {
             var promise = this.inherited(arguments);
-            var newPromise = new Deferred();
-            promise.then(lang.hitch(this, "onUpdated", newPromise), newPromise.reject);
-            return newPromise;
+            if (options && options.overwrite===false) {
+                // insert
+                return promise;
+            } else {
+                // update
+                var newPromise = new Deferred();
+                promise.then(lang.hitch(this, "onUpdated", newPromise), newPromise.reject);
+                return newPromise;
+            }
         }, onUpdated: function (promise, data) {
             var update = [
                 {path: "__v", "value": data["__v"]}

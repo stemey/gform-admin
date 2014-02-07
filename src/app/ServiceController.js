@@ -1,5 +1,6 @@
 define(
-    [  './resource/GridController',
+    [  './singleton/SingletonController',
+        './resource/GridController',
         './swagger/SwaggerController',
         "./router",
         "dojo/_base/lang",
@@ -18,7 +19,7 @@ define(
 
 
     ],
-    function (GridController, SwaggerController, router, lang, declare, metaService, when, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, MenuBar, PopupMenuBarItem, DropDownMenu, MenuItem) {
+    function (SingletonController, GridController, SwaggerController, router, lang, declare, metaService, when, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, _InvisibleMixin, MenuBar, PopupMenuBarItem, DropDownMenu, MenuItem) {
 
         return declare(
             "app.ServiceController",

@@ -15,20 +15,27 @@ define([
             storeRegistry: null,
             resourcePromises: null,
             storeClass: null,
+            idProperty: "id",
             constructor: function () {
                 this.resourcePromises = {};
             },
             onLoaded: function (data) {
                 this.meta = data.resources;
                 this.schemaRegistry = new SchemaRegistry({basePath: this.meta.basePath});
-                this.storeRegistry = new StoreRegistry({storeClass: this.storeClass, basePath: this.meta.basePath, idProperty: "_id"});
+                this.storeRegistry = new StoreRegistry({storeClass: this.storeClass, basePath: this.meta.basePath, idProperty: this.meta.idProperty || this.idProperty});
                 this.meta.resources.forEach(function (resource) {
                     var promise = this._createResource(resource);
                     this.resourcePromises[resource.name] = promise;
                 }, this);
             },
             _createResource: function (resource) {
-                resource.type = "resource";
+                if (resource.type === "singleton") {
+                    resource.type = "singleton";
+                    //resource.resourceId
+
+                } else {
+                    resource.type = "resource";
+                }
                 resource.schemaRegistry = this.schemaRegistry;
                 resource.storeRegistry = this.storeRegistry;
                 resource.editorFactory = this.editorFactory;
@@ -36,7 +43,9 @@ define([
                 var promise = this.schemaRegistry.get(resource.schemaUrl);
                 var deferred = new Deferred();
                 when(promise).then(function (schema) {
-                    resource.tableStructure = gform2tableStructure(schema);
+                    if (resource.type !== "singelton") {
+                        resource.tableStructure = gform2tableStructure(schema);
+                    }
                     deferred.resolve(resource);
                 })
                 return deferred;

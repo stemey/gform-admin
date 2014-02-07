@@ -1,6 +1,10 @@
 {
     "attributes": [
         {
+            "code": "id",
+            "type": "string"
+        },
+        {
             "code": "services",
             "type": "array",
             "typeProperty": "type",
