@@ -21,12 +21,16 @@ define([
             },
             onLoaded: function (data) {
                 this.meta = data.resources;
-                this.schemaRegistry = new SchemaRegistry({basePath: this.meta.basePath});
-                this.storeRegistry = new StoreRegistry({storeClass: this.storeClass, basePath: this.meta.basePath, idProperty: this.meta.idProperty || this.idProperty});
-                this.meta.resources.forEach(function (resource) {
-                    var promise = this._createResource(resource);
-                    this.resourcePromises[resource.name] = promise;
-                }, this);
+                if (this.meta == null) {
+                    // loading failed
+                } else {
+                    this.schemaRegistry = new SchemaRegistry({basePath: this.meta.basePath});
+                    this.storeRegistry = new StoreRegistry({storeClass: this.storeClass, basePath: this.meta.basePath, idProperty: this.meta.idProperty || this.idProperty});
+                    this.meta.resources.forEach(function (resource) {
+                        var promise = this._createResource(resource);
+                        this.resourcePromises[resource.name] = promise;
+                    }, this);
+                }
             },
             _createResource: function (resource) {
                 if (resource.type === "singleton") {

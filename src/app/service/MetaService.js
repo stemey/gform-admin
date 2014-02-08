@@ -1,7 +1,7 @@
 define([
     'dojo/Deferred',
     'dojo/when',
-    'gform/util/Resolver',
+    './Resolver',
     'dojo/_base/json',
     "dojo/text!../services.json",
     "dojo/_base/lang",

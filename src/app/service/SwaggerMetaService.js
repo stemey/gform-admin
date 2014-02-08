@@ -9,9 +9,13 @@ define([
                 this.services = {};
             },
             onLoaded: function (data) {
-                data.apis.apis.forEach(function (api) {
-                    this.services[api.path] = {name: api.path, type: "swagger", path: data.apis.basePath + api.path, description: api.description};
-                }, this)
+                if (data.apis == null) {
+                    // loading failed
+                } else {
+                    data.apis.apis.forEach(function (api) {
+                        this.services[api.path] = {name: api.path, type: "swagger", path: data.apis.basePath + api.path, description: api.description};
+                    }, this)
+                }
             },
             getMeta: function (service) {
                 return this.services[service];
