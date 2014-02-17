@@ -35,8 +35,13 @@ define(
                 },
                 postCreate: function () {
                     var cb = lang.hitch(this, "_pathChanged");
+                    var index = lang.hitch(this, "_index");
                     router.register(":name/:resource", cb);
+                    router.register("", index);
                     router.startup();
+                },
+                _index: function () {
+                    this.serviceStack.selectChild(this.noselection);
                 },
                 _pathChanged: function (evt) {
                     this.selectService(evt.params.name, evt.params.resource);
@@ -53,6 +58,7 @@ define(
                     var resource = decodeURIComponent(resource);
                     var meta = metaService.getMeta(service + ":" + resource);
                     when(meta).then(lang.hitch(this, "onMetaLoaded"));
+
 
                 },
                 onMetaLoaded: function (meta) {
