@@ -1,4 +1,5 @@
 define([
+    'dojo/request/xhr',
     'dojo/Deferred',
     'dojo/when',
     './Resolver',
@@ -7,29 +8,41 @@ define([
     "dojo/_base/lang",
     "dojo/_base/declare"
 ],
-    function (Deferred, when, Resolver, json, servicesJson, lang, declare) {
+    function (xhr, Deferred, when, Resolver, json, servicesJson, lang, declare) {
 
         var MetaService = declare("app.service.MetaService", null, {
             services: null,
             metaPromise: null,
             schemaRegistry: null,
+            expectedCount: null,
+            loadedCount: 0,
             constructor: function () {
+                this.services = {};
                 var services = json.fromJson(servicesJson);
-                var resolver = new Resolver();
                 this.metaPromise = new Deferred();
-                resolver.resolve(services).then(lang.hitch(this, "onLoaded", services));
-            },
-            onLoaded: function (services, data) {
-                var serviceMap = {};
-                this.services = serviceMap;
+                this.expectedCount = services.services.length;
                 services.services.forEach(function (service) {
-                    require([service.type], function (MetaServiceType) {
-                        var metaService = new MetaServiceType();
-                        serviceMap[service.name] = metaService;
-                        metaService.onLoaded(service);
-                    });
-                }, this);
-                this.metaPromise.resolve(data);
+                    var p = xhr(service.url, {method: "GET", handleAs: "json", headers: {"X-Requested-With": null}});
+                    p.then(lang.hitch(this, "onServiceLoaded", service), lang.hitch(this, "onServiceFailed", service));
+                }, this)
+            },
+            onServiceFailed: function (service, e) {
+                console.error("failed to load " + service.name, e);
+                this._loaded();
+            },
+            onServiceLoaded: function (service, data) {
+                var serviceMap = this.services;
+                var me =this;
+                require([service.type], function (MetaServiceType) {
+                    var metaService = new MetaServiceType();
+                    serviceMap[service.name] = metaService;
+                    metaService.onLoaded(service, data);
+                    me._loaded();
+                });
+            },
+            _loaded: function () {
+                this.loadedCount++;
+                if (this.loadedCount == this.expectedCount) this.metaPromise.resolve(true);
             },
             _defer: function (cb) {
                 var deferred = new Deferred();

@@ -1,4 +1,6 @@
 define([
+    'gform/opener/SingleEditorDialogOpener',
+    'gridx/core/model/cache/Sync',
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/aspect",
@@ -26,7 +28,7 @@ define([
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/Toolbar"
-], function (declare, lang, aspect, Grid, Cache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect,  json, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context,createEditorFactory,identityConverter) {
+], function (SingleEditorDialogOpener, SyncCache, declare, lang, aspect, Grid, AsyncCache, VirtualVScroller, ColumnResizer, SingleSort, Filter, FilterBar, Query, Focus, RowHeader, RowSelect, json, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin, template, Context, createEditorFactory, identityConverter) {
 
 
     // TODO move this to baucis
@@ -39,7 +41,7 @@ define([
     return declare([ _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _InvisibleMixin], {
         baseClass: "gformGridController",
         templateString: template,
-        opener:null,
+        opener: null,
         postCreate: function () {
         },
         loadData: function (resource) {
@@ -53,15 +55,24 @@ define([
             if (this.grid) {
                 this.grid.destroy();
             }
-            var storeRegistry=resource.storeRegistry;
-            var schemaRegistry=resource.schemaRegistry;
+            var storeRegistry = resource.storeRegistry;
+            var schemaRegistry = resource.schemaRegistry;
 
             var structure = resource.tableStructure;
             var props = { id: "grid", width: "100%", height: "100%"};
-            props.cacheClass = Cache;
+            props.cacheClass = resource.sync ? SyncCache : AsyncCache;
             props.structure = structure;
-            this.store=storeRegistry.get(resource.collectionUrl);
+            this.store = storeRegistry.get(resource.collectionUrl);
             var conditions = resource.conditions || undefined;
+
+            var filterModule = {
+                moduleClass: FilterBar,
+                type: "all"
+            }
+
+            if (resource.conditions) {
+                filterModule.conditions = conditions;
+            }
 
             props.store = this.store;
             props.modules = [
@@ -70,11 +81,7 @@ define([
                     moduleClass: Filter,
                     serverMode: true
                 },
-                {
-                    moduleClass: FilterBar,
-                    type: "all",
-                    conditions: conditions
-                },
+                filterModule,
                 {
                     moduleClass: RowSelect,
                     multiple: false,
@@ -82,6 +89,7 @@ define([
 
 
                 },
+                Filter,
                 RowHeader,
                 SingleSort,
                 ColumnResizer
@@ -94,10 +102,10 @@ define([
 
             this.ctx = new Context();
             this.schemaUrl = resource.schemaUrl;
-            this.ctx.schemaRegistry=schemaRegistry;
-            this.ctx.storeRegistry=storeRegistry;
-            this.ctx.opener=this.opener;
-            this.opener.set("ctx",this.ctx);
+            this.ctx.schemaRegistry = schemaRegistry;
+            this.ctx.storeRegistry = storeRegistry;
+            this.ctx.opener = this.opener;
+            this.opener.set("ctx", this.ctx);
 
 
             var editorFactory = resource.editorFactory;

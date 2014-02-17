@@ -3,14 +3,17 @@ var dojoConfig = {
 	async: true,
 	baseUrl: '',
 	//tlmSiblingOfDojo: false,
-	isDebug: true//,
-//	packages: [
-//		'dojo',
-//		'dijit',
-//		'test'
-//	]
-//    ,
-//	deps: [ 'app' ],
+	isDebug: true,
+	packages: [
+        'app',
+		'dojo',
+		'dijit',
+        'gform',
+        'gridx',
+        'dojox',
+		'localstorage'
+	]
+        //	deps: [ 'app' ]//,
 //	callback: function (test) {
 //		test.init();
 //	}

@@ -1,0 +1,64 @@
+{
+    "attributes": [
+        {
+            "type": "string",
+            "code": "firstname",
+            "required":true
+        },
+        {
+            "type": "string",
+            "values": [
+                "Mr.",
+                "Mrs."
+            ],
+            "code": "salutation"
+        },
+        {
+            "code": "birthday",
+            "type": "date"
+        },
+        {
+            "code": "friends",
+            "type": "array",
+            "element": {
+                "type": "ref",
+                "idProperty": "_id",
+                "url": "./Users/",
+                "searchProperty": "firstname",
+                "schemaUrl": "./Users"
+            }
+        },
+        {
+            "code": "addresses",
+            "type": "array",
+            "group": {
+                "attributes": [
+                    {
+                        "type": "string",
+                        "code": "type"
+                    },
+                    {
+                        "type": "string",
+                        "code": "street"
+                    },
+                    {
+                        "type": "string",
+                        "code": "zip"
+                    },
+                    {
+                        "type": "string",
+                        "code": "country"
+                    }
+                ],
+                "type": "object"
+            }
+        },
+        {
+            "type": "number",
+            "code": "id",
+            "places":"0,20",
+            "disabled": true
+        }
+    ],
+    "id": "User"
+}

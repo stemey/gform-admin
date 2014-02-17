@@ -1,0 +1,55 @@
+{
+    "editor": "tab",
+    "groups": [
+        {
+            "code": "general",
+            "label": "General",
+            "attributes": [
+                {
+                    "type": "string",
+                    "code": "title"
+                },
+                {
+                    "code": "tags",
+                    "type": "array",
+                    "element": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "code": "rating",
+                    "type": "number"
+                },
+                {
+                    "type": "ref",
+                    "idProperty": "_id",
+                    "url": "./Users/",
+                    "searchProperty": "firstname",
+                    "schemaUrl": "./Users",
+                    "code": "author"
+                },
+                {
+                    "type": "number",
+                    "places":"0,20",
+                    "code": "id",
+                    "disabled": true
+                }
+            ]
+        },
+        {
+            "code": "text",
+            "label": "Text",
+            "attributes": [
+                {
+                    "type": "string",
+                    "groupCode": "text",
+                    "label": "The blog entry",
+                    "description": "this should be really interesting stuff.",
+                    "editor": "textarea",
+                    "code": "text"
+                }
+            ]
+        }
+    ],
+    "id": "BlogPost"
+}

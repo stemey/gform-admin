@@ -10,14 +10,24 @@
             <div data-dojo-attach-point="resource" data-dojo-type="app/resource/GridController"></div>
             <div data-dojo-attach-point="noselection" data-dojo-type="dijit.layout.ContentPane"
                  data-dojo-props="selected:true">
-                <h2>Manage data</h2>
+                <h2>gform admin</h2>
+                <h3>Manage data</h3>
                 <p>
-                    gform rest client provides a generic master detail view to browse and edit data.
+                    gform admin provides a generic ui to manage data. The connected services (datastores) are defined in <a href="https://github.com/stemey/gform-admin/blob/master/src/app/services.json">app/services.json</a>.
+                    The following stores are connected by default.
+
+                    <ul>
+                        <li>An empty local storage for Bloposts and User</li>
+                        <li>An example <a href="http://www.github.com/Learnboost/mongoose">mongoose</a> application. See installation instructions on <a href="http://www.github.com/stemey/baucis-example">github</a></li>
+                    </ul>
                 </p>
-                <h2>Invoke services</h2>
+                <h3>Swagger client</h3>
                 <p>
-                    gform rest client is a swagger client.
+                    gform admin is also a swagger client. It is connected to the example swagger application by <a href="http://swagger.wordnik.com/">wordnik</a>
+
+
                 </p>
+                <p>for more information visit <a href="http://www.github.com/stemey/gform-admin">admin gform on github</a></p>
 
             </div>
         </div>

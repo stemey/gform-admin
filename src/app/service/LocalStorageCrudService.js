@@ -1,14 +1,14 @@
 define([
+    'app/infrastructure/LocalStore',
     "dojo/_base/declare",
-    "dojo/store/Memory",
     "gform/createLayoutEditorFactory",
     "./AbstractCrudService"
 ],
-    function (declare, Store, createLayoutEditorFactory, AbstractCrudService) {
+    function (LocalStore, declare, createLayoutEditorFactory, AbstractCrudService) {
 
         return declare("app.service.InMemoryCrudService", [AbstractCrudService], {
             constructor: function () {
-                this.storeClass = Store;
+                this.storeClass = LocalStore;
                 this.editorFactory = createLayoutEditorFactory();
                 this.sync=true;
 

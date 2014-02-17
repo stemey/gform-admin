@@ -95,6 +95,13 @@ define([ '../../dojo/request/xhr',
                 return undefined;
             }
         },
+        getValuesFromEditorBody: function (editor, meta) {
+            if (meta) {
+                return editor.get("plainValue").body;
+            } else {
+                return undefined;
+            }
+        },
         submit: function () {
             var valid = this.validate();
             if (!valid) {
@@ -118,7 +125,7 @@ define([ '../../dojo/request/xhr',
                 restService.executePost({
                     params: this.getValuesFromEditor(this.editorParams, this.meta.params),
                     variables: this.getValuesFromEditor(this.editorVariables, this.meta.pathVariables),
-                    requestBody: this.getValuesFromEditor(this.editorBody, this.meta.requestBody),
+                    requestBody: this.getValuesFromEditorBody(this.editorBody, this.meta.requestBody),
                     meta: this.meta,
                     callback: callback,
                     error: error
@@ -127,7 +134,7 @@ define([ '../../dojo/request/xhr',
                 restService.executePut({
                     params: this.getValuesFromEditor(this.editorParams, this.meta.params),
                     variables: this.getValuesFromEditor(this.editorVariables, this.meta.pathVariables),
-                    requestBody: this.getValuesFromEditor(this.editorBody, this.meta.requestBody),
+                    requestBody: this.getValuesFromEditorBody(this.editorBody, this.meta.requestBody),
                     meta: this.meta,
                     callback: callback,
                     error: error
@@ -136,7 +143,7 @@ define([ '../../dojo/request/xhr',
                 restService.executeDelete({
                     params: this.getValuesFromEditor(this.editorParams, this.meta.params),
                     variables: this.getValuesFromEditor(this.editorVariables, this.meta.pathVariables),
-                    requestBody: this.getValuesFromEditor(this.editorBody, this.meta.requestBody),
+                    requestBody: this.getValuesFromEditorBody(this.editorBody, this.meta.requestBody),
                     meta: this.meta,
                     callback: callback,
                     error: error

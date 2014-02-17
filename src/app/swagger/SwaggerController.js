@@ -1,4 +1,5 @@
 define([
+    'gform/util/Resolver',
     '../../gform/schema/JsonSchemaConverter',
     'dojo/aspect',
     "../method/MethodController",
@@ -9,7 +10,7 @@ define([
     "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dojo/text!./swagger.html", "dojo/query",//
     "dojox/highlight",
     "dojox/highlight/languages/javascript", "dojox/highlight/widget/Code", "dojox/mvc/Output", "dojox/mvc/Group"
-], function (JsonSchemaConverter, aspect, MethodController, xhr, array, lang, declare, Stateful, metaService, restService, ItemFileReadStore, createStandardEditorFactory, _InvisibleMixin,//
+], function (Resolver, JsonSchemaConverter, aspect, MethodController, xhr, array, lang, declare, Stateful, metaService, restService, ItemFileReadStore, createStandardEditorFactory, _InvisibleMixin,//
              _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, query, highlight) {
 
 
@@ -26,11 +27,12 @@ define([
         },
         convertMetas: function (meta) {
             var operations = [];
+
             meta.apis.forEach(function (api) {
                 api.operations.forEach(function (op) {
                     var operation = {};
                     operation.uriPattern = meta.basePath + api.path;
-                    operation.verb = op.httpMethod;
+                    operation.verb = op.method;
                     operation.nickname = op.nickname;
                     operation.description = op.description;
 
@@ -40,16 +42,34 @@ define([
                     op.parameters.forEach(function (p) {
                         var param = {};
                         param.code = p.name;
-                        param.type = (p.dataType == "int" || p.dataType == "double") ? "number" : p.dataType;
+                        param.type = (p.type == "int" || p.type == "integer" || p.type == "double") ? "number" : p.type;
                         param.description = p.description;
                         if (p.paramType == "query") {
                             operation.params.attributes.push(param);
                         } else if (p.paramType == "path") {
                             operation.pathVariables.attributes.push(param);
                         } else if (p.paramType == "body") {
+                            // wrap in an object with single attribute incase this is an array and not an object.
                             var converter = new JsonSchemaConverter();
-                            var schema = converter.convert(meta.models[p.dataType]);
+                            var s = meta.models[p.type];
+                            // TODO clone the object
+                            var schema;
+                            if (s) {
+                                schema = {};
+                                schema.type = "object";
+                                lang.mixin(schema, s);
+                            } else {
+                                schema = {};
+                                lang.mixin(schema, p);
+                                if (schema.type == "array" && typeof schema.items.type == "undefined") {
+                                    schema.items.type = "object";
+                                }
+                            }
+                            var wrappedType = {properties: {body: schema}};
+                            wrappedType.required=["body"];
+                            var schema = converter.convert(wrappedType);
                             operation.requestBody = schema;
+
                         }
                     })
 
@@ -59,6 +79,8 @@ define([
             return operations;
         },
         onMetaLoaded: function (allMeta) {
+            var resolver = new Resolver();
+            resolver.resolve(allMeta);
             this.metas = this.convertMetas(allMeta);
             var idx = 0;
             var options = this.metas.map(function (meta) {

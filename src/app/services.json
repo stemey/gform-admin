@@ -1,18 +1,22 @@
 {
     "services": [
         {
+            "type": "app/service/LocalStorageCrudService",
+            "name": "blog (local storage)",
+            "url": "app/example/api.json"
+
+        },
+        {
             "type": "app/service/BaucisCrudService",
-            "name": "blog (crud)",
-            "resources": {
-                "$ref": "http://localhost:3333/api/gform"
-            }
+            "name": "blog (mongodb)",
+            "url": "http://localhost:3333/api/gform"
+
         },
         {
             "type": "app/service/SwaggerMetaService",
-            "name": "blog (rest service)",
-            "apis": {
-                "$ref": "http://localhost:3333/api/api-docs"
-            }
+            "name": "swagger example",
+            "url": "http://petstore.swagger.wordnik.com/api/api-docs"
+
         }
 
     ]

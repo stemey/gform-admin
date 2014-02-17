@@ -8,12 +8,13 @@ define([
             constructor: function () {
                 this.services = {};
             },
-            onLoaded: function (data) {
-                if (data.apis == null) {
+            onLoaded: function (service, data) {
+                if (data == null) {
                     // loading failed
                 } else {
-                    data.apis.apis.forEach(function (api) {
-                        this.services[api.path] = {name: api.path, type: "swagger", path: data.apis.basePath + api.path, description: api.description};
+                    data.apis.forEach(function (api) {
+                        var path = service.url + api.path;
+                        this.services[api.path] = {name: api.path, type: "swagger", path: path, description: api.description};
                     }, this)
                 }
             },

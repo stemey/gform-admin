@@ -1,0 +1,17 @@
+{
+    "version": "0.0.1",
+    "resources": [
+        {
+            "schemaUrl": "./Users.json",
+            "resourceUrl": "Users/",
+            "collectionUrl": "Users/",
+            "name": "User"
+        },
+        {
+            "schemaUrl": "./BlogPosts.json",
+            "resourceUrl": "BlogPosts/",
+            "collectionUrl": "BlogPosts/",
+            "name": "BlogPost"
+        }
+    ]
+}

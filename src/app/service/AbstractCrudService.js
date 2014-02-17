@@ -16,15 +16,17 @@ define([
             resourcePromises: null,
             storeClass: null,
             idProperty: "id",
+            sync:false,
             constructor: function () {
                 this.resourcePromises = {};
             },
-            onLoaded: function (data) {
-                this.meta = data.resources;
+            onLoaded: function (service, data) {
+                this.meta = data;
                 if (this.meta == null) {
                     // loading failed
                 } else {
-                    this.schemaRegistry = new SchemaRegistry({basePath: this.meta.basePath});
+                    var basePath = this.meta.basePath || service.url;
+                    this.schemaRegistry = new SchemaRegistry({basePath: basePath});
                     this.storeRegistry = new StoreRegistry({storeClass: this.storeClass, basePath: this.meta.basePath, idProperty: this.meta.idProperty || this.idProperty});
                     this.meta.resources.forEach(function (resource) {
                         var promise = this._createResource(resource);
@@ -41,6 +43,7 @@ define([
                     resource.type = "resource";
                 }
                 resource.schemaRegistry = this.schemaRegistry;
+                resource.sync=this.sync;
                 resource.storeRegistry = this.storeRegistry;
                 resource.editorFactory = this.editorFactory;
                 var fullSchemaUrl = new Url()
