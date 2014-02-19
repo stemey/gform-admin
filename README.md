@@ -11,7 +11,7 @@ form are created according to the resource's schema. This schema must be supplie
 
 ### Service invokation
 
-admin-gform is a [swagger](www.wordnik.com/swagger) client. It actually exceeds the default swagger ui's features by providing a complete form for
+admin-gform is a [swagger](http://www.wordnik.com/swagger) client. It actually exceeds the default swagger ui's features by providing a complete form for
 posting and putting new or changed resources.
 
 Limitations:
@@ -87,10 +87,12 @@ These urls must be absolute or relative to the provided basePath or the url of t
 All referenced schema may reference external schemas relative to the basePath as well.
 
 
-## Examples
+## Libraries and examples
 
 ### Mongoose
 
-A complete implementation of the gform rest api for [mongoose](www.github.com/Learnboost/mongoose) is available  [here](www.github.com/stemey/baucis-gform)
+A complete implementation of the gform rest api for [mongoose](http://www.github.com/Learnboost/mongoose) is available  [here](http://www.github.com/stemey/baucis-gform). An example application
+is available [here](http://www.github.com/stemey/mongoose-administration-example)
+
 
 
