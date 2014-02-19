@@ -11,7 +11,7 @@ form are created according to the resource's schema. This schema must be supplie
 
 ### Service invokation
 
-admin-gform is a [swagger](http://www.wordnik.com/swagger) client. It actually exceeds the default swagger ui's features by providing a complete form for
+admin-gform is a [swagger](http://swagger.wordnik.com) client. It actually exceeds the default swagger ui's features by providing a complete form for
 posting and putting new or changed resources.
 
 Limitations:
