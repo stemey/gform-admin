@@ -92,7 +92,7 @@ All referenced schema may reference external schemas relative to the basePath as
 
 ### Live example
 
-[gform-admin](www.toobop.net/gform-admin) provides access to swagger example application and crud operations on Blod and User data in lcoalstorage.
+[gform-admin](http://www.toobop.net/gform-admin) provides access to swagger example application and crud operations on BlogPost and User data in lcoalstorage.
 
 ### Mongoose
 
