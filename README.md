@@ -2,6 +2,7 @@
 
 admin-gform is a generic client application to administrate data and invoke services.
 
+
 ### Data administration
 
 admin-gform generates master detail views to browse, create, update and delete entities via restful services.
@@ -88,6 +89,10 @@ All referenced schema may reference external schemas relative to the basePath as
 
 
 ## Libraries and examples
+
+### Live example
+
+[gform-admin](www.toobop.net/gform-admin) provides access to swagger example application and crud operations on Blod and User data in lcoalstorage.
 
 ### Mongoose
 
