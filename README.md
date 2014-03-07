@@ -2,6 +2,7 @@
 
 admin-gform is a generic client application to administrate data and invoke services.
 
+[live demo](http://www.toobop.net/gform-admin)
 
 ### Data administration
 
@@ -9,7 +10,6 @@ admin-gform generates master detail views to browse, create, update and delete e
 The ui consists of a table for browsing resource documents and a form to edit a single resource. Both table and
 form are created according to the resource's schema. This schema must be supplied in either json schema or gform schema format.
 
-[live demo](http://www.toobop.net/gform-admin)
 
 
 ### Service invokation
